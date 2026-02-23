@@ -1,7 +1,7 @@
 """
-Blue Corp 2.0 — Sistema de Gestión Previsional
-================================================
-FastAPI backend con motor completo SIPA (Ley 24.241 + modificatorias).
+Blue Corp 2.0 — Herramienta Judicial Previsional
+==================================================
+FastAPI backend para cálculo previsional judicial (Ley 24.241 + modificatorias).
 """
 
 from fastapi import FastAPI
@@ -13,15 +13,14 @@ from app.core.security import get_password_hash
 
 # Importar modelos para que SQLAlchemy los registre
 from app.models import (
-    User, Affiliate, AfiliadoPeriodoLaboral, AfiliadoRemuneracion,
-    Liquidacion, ItemLiquidacion, DescuentoVoluntario, Novedad,
-    Expediente, MovimientoExpediente, TablaRIPTE, TablaMovilidad, AuditLog
+    User,
+    Ficha, Servicio, Remuneracion, CalculoDerecho, CalculoHaber, CalculoReajuste,
 )
 
-from app.api.endpoints import (
-    auth, users, affiliates, liquidations, expedientes,
-    novedades, ripte, movilidad, reports
-)
+from app.api.endpoints import auth, users
+from app.api.endpoints.fichas import router as fichas_router
+from app.api.endpoints.calculos import router as calculos_router
+from app.api.endpoints.herramientas import router as herramientas_router
 
 # Crear todas las tablas
 Base.metadata.create_all(bind=engine)
@@ -30,23 +29,19 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="""
-## Blue Corp 2.0 — Sistema de Gestión Previsional SIPA
+## Blue Corp 2.0 — Herramienta Judicial Previsional
 
 ### Módulos implementados:
-- **Afiliados**: alta, modificación, baja, padrón completo
-- **Liquidaciones**: mensual, SAC, retroactivo, recibo PDF
-- **Expedientes**: gestión de trámites con historial de movimientos
-- **Novedades**: eventos que afectan el haber
-- **Descuentos**: PAMI, sindicatos, mutuales, embargos
-- **RIPTE**: tabla histórica 2010–2026
-- **Movilidad**: coeficientes históricos + simulador
-- **Reportes**: dashboard, padrón, estadísticas
+- **Fichas**: gestión del expediente cliente (causante, servicios, remuneraciones)
+- **Cálculo de Derecho**: determina si el causante tiene derecho a la prestación
+- **Cálculo de Haber**: PBU + PC + PAP según Ley 24.241
+- **Reajuste Judicial**: solo movilidad, Badaro, De Laude
+- **Herramientas**: tablas históricas de RIPTE, movilidad, topes, tasas
 
 ### Cálculo previsional (Ley 24.241):
 - **PBU** = 2.5 × Haber Mínimo (Art. 19-21)
 - **PC** = 1.5% × años_pre_SIJP × PBCI (Art. 23-25)
 - **PAP** = 0.85% × años_post_SIJP × PBCI (Art. 30-31)
-- **SAC** = 50% × mejor haber semestre (Ley 23.041)
 - **Movilidad**: DL 274/2024 (mensual IPC desde 2024)
     """,
     docs_url="/docs",
@@ -70,21 +65,16 @@ app.add_middleware(
 # ── Routers ───────────────────────────────────────────────────────────────────
 app.include_router(auth.router,         prefix="/api")
 app.include_router(users.router,        prefix="/api")
-app.include_router(affiliates.router,   prefix="/api")
-app.include_router(liquidations.router, prefix="/api")
-app.include_router(expedientes.router,  prefix="/api")
-app.include_router(novedades.router,    prefix="/api")
-app.include_router(ripte.router,        prefix="/api")
-app.include_router(movilidad.router,    prefix="/api")
-app.include_router(reports.router,      prefix="/api")
+app.include_router(fichas_router,       prefix="/api")
+app.include_router(calculos_router,     prefix="/api")
+app.include_router(herramientas_router, prefix="/api")
 
 
 @app.on_event("startup")
 def seed_database():
-    """Datos iniciales (usuarios y RIPTE histórico)."""
+    """Datos iniciales (usuarios por defecto)."""
     db = SessionLocal()
     try:
-        # Usuarios por defecto
         usuarios_seed = [
             {"username": "admin", "email": "admin@bluecorp.com",
              "full_name": "Administrador", "role": "admin", "password": "admin123"},
@@ -101,13 +91,6 @@ def seed_database():
                     hashed_password=get_password_hash(u["password"]),
                     is_active=True,
                 ))
-
-        # RIPTE histórico
-        from app.engines.ripte_data import RIPTE_HISTORICO
-        if db.query(TablaRIPTE).count() == 0:
-            for entry in RIPTE_HISTORICO:
-                db.add(TablaRIPTE(periodo=entry["periodo"], valor=entry["valor"]))
-
         db.commit()
     finally:
         db.close()
@@ -122,13 +105,10 @@ def root():
         "docs": "/docs",
         "endpoints": {
             "auth": "/api/auth",
-            "affiliates": "/api/affiliates",
-            "liquidations": "/api/liquidations",
-            "expedientes": "/api/expedientes",
-            "novedades": "/api/novedades",
-            "ripte": "/api/ripte",
-            "movilidad": "/api/movilidad",
-            "reports": "/api/reports",
+            "users": "/api/users",
+            "fichas": "/api/fichas",
+            "calculos": "/api/calculos",
+            "herramientas": "/api/herramientas",
         },
     }
 
