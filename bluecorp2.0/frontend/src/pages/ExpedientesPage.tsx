@@ -154,7 +154,7 @@ export default function ExpedientesPage() {
                 <TableRow><TableCell colSpan={7} align="center" sx={{ py: 6, color: 'text.secondary' }}>No hay expedientes</TableCell></TableRow>
               ) : expedientes.map((exp) => (
                 <TableRow key={exp.id} hover>
-                  <TableCell fontFamily="monospace" fontWeight={600}>{exp.numero_expediente}</TableCell>
+                  <TableCell sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{exp.numero_expediente}</TableCell>
                   <TableCell>{exp.afiliado_id}</TableCell>
                   <TableCell sx={{ textTransform: 'capitalize' }}>{exp.tipo_tramite.replace(/_/g, ' ')}</TableCell>
                   <TableCell>{exp.solicitante_nombre || '-'}</TableCell>

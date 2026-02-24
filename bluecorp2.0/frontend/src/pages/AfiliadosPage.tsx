@@ -128,8 +128,8 @@ export default function AfiliadosPage() {
               ) : afiliados.map((a) => (
                 <TableRow key={a.id} hover sx={{ cursor: 'pointer' }}
                   onClick={() => navigate(`/afiliados/${a.id}`)}>
-                  <TableCell fontFamily="monospace" fontWeight={600}>{a.cuil}</TableCell>
-                  <TableCell fontWeight={500}>{a.apellido}, {a.nombre}</TableCell>
+                  <TableCell sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{a.cuil}</TableCell>
+                  <TableCell sx={{ fontWeight: 500 }}>{a.apellido}, {a.nombre}</TableCell>
                   <TableCell>
                     <Typography variant="caption" sx={{ textTransform: 'capitalize' }}>
                       {a.tipo_prestacion.replace(/_/g, ' ')}
@@ -144,8 +144,8 @@ export default function AfiliadosPage() {
                       sx={{ textTransform: 'capitalize', fontSize: 11 }}
                     />
                   </TableCell>
-                  <TableCell align="right" fontWeight={600}>{formatARS(a.haber_actual)}</TableCell>
-                  <TableCell fontFamily="monospace">{a.numero_beneficio || '-'}</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 600 }}>{formatARS(a.haber_actual)}</TableCell>
+                  <TableCell sx={{ fontFamily: 'monospace' }}>{a.numero_beneficio || '-'}</TableCell>
                   <TableCell>{a.provincia || '-'}</TableCell>
                   <TableCell align="center" onClick={(e) => e.stopPropagation()}>
                     <Stack direction="row" spacing={0.5} justifyContent="center">

@@ -139,8 +139,8 @@ export default function RIPTEPage() {
                 </TableRow>
               ) : [...registros].reverse().map((r) => (
                 <TableRow key={r.id} hover>
-                  <TableCell fontFamily="monospace" fontWeight={600}>{r.periodo}</TableCell>
-                  <TableCell align="right" fontWeight={600}>{formatARS(r.valor)}</TableCell>
+                  <TableCell sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{r.periodo}</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 600 }}>{formatARS(r.valor)}</TableCell>
                   <TableCell align="center">
                     {r.variacion_mensual != null ? (
                       <Chip

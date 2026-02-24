@@ -156,8 +156,8 @@ export default function AfiliadoDetailPage() {
                   </TableRow>
                 ) : afiliado.periodos_laborales.map((p, i) => (
                   <TableRow key={i} hover>
-                    <TableCell fontWeight={500}>{p.empleador}</TableCell>
-                    <TableCell fontFamily="monospace">{p.cuit_empleador || '-'}</TableCell>
+                    <TableCell sx={{ fontWeight: 500 }}>{p.empleador}</TableCell>
+                    <TableCell sx={{ fontFamily: 'monospace' }}>{p.cuit_empleador || '-'}</TableCell>
                     <TableCell>{p.fecha_inicio}</TableCell>
                     <TableCell>{p.fecha_fin || 'Presente'}</TableCell>
                     <TableCell sx={{ textTransform: 'capitalize' }}>{p.tipo_relacion.replace(/_/g, ' ')}</TableCell>
@@ -189,7 +189,7 @@ export default function AfiliadoDetailPage() {
                   </TableRow>
                 ) : [...afiliado.remuneraciones].reverse().map((r, i) => (
                   <TableRow key={i} hover>
-                    <TableCell fontFamily="monospace" fontWeight={600}>{r.periodo}</TableCell>
+                    <TableCell sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{r.periodo}</TableCell>
                     <TableCell align="right">{formatARS(r.remuneracion_bruta)}</TableCell>
                     <TableCell align="right">{formatARS(r.remuneracion_imponible)}</TableCell>
                     <TableCell align="right">{r.aporte_personal != null ? formatARS(r.aporte_personal) : '-'}</TableCell>

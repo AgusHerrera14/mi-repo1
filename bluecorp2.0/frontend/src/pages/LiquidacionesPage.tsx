@@ -204,14 +204,14 @@ export default function LiquidacionesPage() {
                 <TableRow><TableCell colSpan={7} align="center" sx={{ py: 6, color: 'text.secondary' }}>No hay liquidaciones</TableCell></TableRow>
               ) : liquidaciones.map((l) => (
                 <TableRow key={l.id} hover>
-                  <TableCell fontFamily="monospace" fontWeight={600}>{l.numero_liquidacion || `LIQ-${l.id}`}</TableCell>
+                  <TableCell sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{l.numero_liquidacion || `LIQ-${l.id}`}</TableCell>
                   <TableCell>{l.afiliado_id}</TableCell>
-                  <TableCell fontFamily="monospace">{l.periodo}</TableCell>
+                  <TableCell sx={{ fontFamily: 'monospace' }}>{l.periodo}</TableCell>
                   <TableCell sx={{ textTransform: 'capitalize' }}>{l.tipo}</TableCell>
                   <TableCell>
                     <Chip label={l.estado} color={ESTADO_COLOR[l.estado] || 'default'} size="small" variant="outlined" sx={{ textTransform: 'capitalize', fontSize: 11 }} />
                   </TableCell>
-                  <TableCell align="right" fontWeight={700}>{formatARS(l.haber_neto)}</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700 }}>{formatARS(l.haber_neto)}</TableCell>
                   <TableCell align="center">
                     <Stack direction="row" spacing={0.3} justifyContent="center">
                       <IconButton size="small" onClick={() => handleVerDetalle(l.id)} title="Ver detalle"><Visibility fontSize="small" /></IconButton>
@@ -328,8 +328,8 @@ export default function LiquidacionesPage() {
                   </TableRow>
                 ))}
                 <TableRow sx={{ bgcolor: '#e3f2fd' }}>
-                  <TableCell fontWeight={700} colSpan={2}>HABER NETO</TableCell>
-                  <TableCell align="right" fontWeight={700} sx={{ color: '#1565c0', fontSize: 16 }}>{formatARS(viewLiq.haber_neto)}</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }} colSpan={2}>HABER NETO</TableCell>
+                  <TableCell align="right" sx={{ fontWeight: 700, color: '#1565c0', fontSize: 16 }}>{formatARS(viewLiq.haber_neto)}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

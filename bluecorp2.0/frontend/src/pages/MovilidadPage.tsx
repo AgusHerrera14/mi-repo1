@@ -152,7 +152,7 @@ export default function MovilidadPage() {
                   {resultadoSim.proyeccion.map((p: any) => (
                     <TableRow key={p.mes}>
                       <TableCell>Mes {p.mes}</TableCell>
-                      <TableCell align="right" fontWeight={600}>{formatARS(p.haber_proyectado)}</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 600 }}>{formatARS(p.haber_proyectado)}</TableCell>
                       <TableCell align="right">
                         <Chip label={`+${p.variacion_acumulada_pct}%`} color="success" size="small" />
                       </TableCell>
@@ -192,8 +192,8 @@ export default function MovilidadPage() {
                 </TableRow>
               ) : [...tabla].reverse().map((r) => (
                 <TableRow key={r.periodo} hover>
-                  <TableCell fontFamily="monospace" fontWeight={600}>{r.periodo}</TableCell>
-                  <TableCell fontFamily="monospace">{r.desde}</TableCell>
+                  <TableCell sx={{ fontFamily: 'monospace', fontWeight: 600 }}>{r.periodo}</TableCell>
+                  <TableCell sx={{ fontFamily: 'monospace' }}>{r.desde}</TableCell>
                   <TableCell align="right">
                     <Typography
                       fontWeight={700}
